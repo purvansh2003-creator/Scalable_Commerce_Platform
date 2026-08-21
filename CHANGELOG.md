@@ -1,0 +1,139 @@
+# Changelog
+
+All notable changes to this project are documented in this file. The format is
+based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
+project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Added
+
+- Multi-stage production container image with locked runtime-only dependencies,
+  non-root execution, liveness healthcheck, Compose migrations, and CI smoke tests
+- Explicit trusted-proxy IP/CIDR allowlisting for Uvicorn client-address
+  resolution, with canonical client IPs shared by rate limiting and request logs
+- Administrative account disable/re-enable lifecycle with immediate access
+  rejection and atomic refresh-session revocation
+- Optional Redis-backed fixed-window rate limiting shared across API processes
+- Privacy-preserving HMAC client identifiers, atomic counters, and bounded TTLs
+- Explicit fail-closed/fail-open outage policies with readiness and metrics
+- Redis services for local Compose and CI integration coverage
+- Optional PostgreSQL transactional outbox for durable lifecycle-email delivery
+- Horizontally scalable workers with leases, retries, dead-letter handling,
+  encrypted payloads, graceful shutdown, and bounded telemetry
+- Optional Redis cache-aside for validated public OIDC discovery and JWKS data
+- Bounded cache keys, TTLs, refresh locks, manual invalidation, and signing-key
+  rotation refresh without caching identity or authorization decisions
+
+- Optional OpenTelemetry distributed tracing across FastAPI, SQLAlchemy, HTTPX,
+  Redis, and transactional outbox worker execution
+- W3C Trace Context propagation through bounded outbox metadata, JSON log
+  `trace_id`/`span_id` correlation, OTLP/HTTP export, sampling controls, and
+  secret-redaction safeguards
+- Reproducible PostgreSQL benchmark harness with deterministic isolated fixtures,
+  sync/async query parity, latency percentiles, pool telemetry, and JSON output
+- CI correctness smoke coverage for the asyncpg prototype and rollback semantics
+- Architecture decision retaining synchronous SQLAlchemy for v1.3.0 until
+  representative measurements justify a separately scoped migration
+- Guarded k6 load-testing profiles for health baselines, authenticated reads,
+  and isolated per-virtual-user refresh-token rotation
+- Explicit workload error-rate and p95/p99 starting thresholds plus a staged,
+  repeatable measurement guide for controlled environments
+
+## [1.2.0] - 2026-08-09
+
+### Added
+
+- Optional normalized email identities during backward-compatible registration
+- Single-use, hashed, expiring account-action tokens for email verification
+- Enumeration-resistant verification request and atomic confirmation endpoints
+- Explicit disabled/SMTP delivery boundary and verification configuration
+- Enumeration-resistant password recovery with scoped, hashed reset tokens
+- Atomic password updates with refresh-session revocation
+- Refresh-token families with rotation-replay detection
+- Authenticated device-session listing and idempotent family revocation
+- Optional TOTP MFA with encrypted seeds and replay-resistant verification
+- Hash-only, single-use recovery codes and opaque MFA login challenges
+- Access-token authentication-method and authentication-time claims for step-up hooks
+- Provider-neutral OIDC Authorization Code login with PKCE S256, state, nonce,
+  strict ID-token validation, and explicit account linking
+- Hash-only browser-bound OIDC transactions and immutable issuer/subject identities
+
+### Changed
+
+- Registration conflicts now return a controlled `409` response
+- SMTP delivery supports separately configured verification and reset URLs
+- Login accepts a bounded device label and logout revokes the full token family
+- MFA-enabled login now requires a short-lived second-factor challenge; refresh
+  tokens do not preserve recent-MFA status
+- Existing local accounts are never silently linked by matching provider email;
+  identity changes revoke refresh sessions
+
+## [1.1.0] - 2026-08-09
+
+### Added
+
+- Dedicated liveness and database-backed readiness probes
+- Prometheus request count, status, latency, and in-progress metrics
+- Structured JSON logs with validated request correlation IDs
+- Monitoring, alerting, multi-worker metrics, and troubleshooting guidance
+- Branch-aware test coverage reporting with a 90% CI gate and XML artifact
+- Expanded admin, CORS, exception, rollback, refresh-token, and rate-limit tests
+- Cross-platform setup, database, server, migration, and quality-gate commands
+- Local development workflow and troubleshooting guide
+- Copy-paste API authentication, authorization, health, and metrics examples
+- Architecture guide covering request flow, security, data, and observability
+- Deployment-pattern and safe release-sequence guidance
+- Automated validation for internal documentation links
+
+## [1.0.1] - 2026-08-08
+
+### Added
+
+- Ruff linting and formatting checks
+- Dependency auditing as an enforced CI gate
+- PostgreSQL 17 service for migrations and tests in CI
+- Wheel build and import smoke test
+- Package URLs, classifiers, and release metadata
+- Explicit current limitations and a release checklist
+
+### Changed
+
+- Prepared package version 1.0.1
+- Reworked README around value, quick start, architecture, and evidence
+- Replaced deprecated `uvicorn.workers.UvicornWorker` with `uvicorn-worker`
+- Replaced the deprecated `httpx` test dependency with `httpx2`
+- Replaced Passlib's unmaintained bcrypt adapter with direct bcrypt calls while
+  retaining compatibility with existing bcrypt hashes
+- Updated contribution, deployment, and roadmap documentation
+- Moved funding configuration to `.github/FUNDING.yml`
+
+### Fixed
+
+- Closed the README project-structure code block that hid subsequent sections
+- Aligned the documented Python requirement with Python 3.13
+- Included the `app` package in built wheel artifacts
+- Removed hard-coded application version strings
+- Removed a CI security-audit command that could silently succeed after failure
+
+## [1.0.0] - 2026-08-05
+
+### Added
+
+- FastAPI application architecture
+- PostgreSQL database integration with SQLAlchemy and Alembic
+- JWT access-token authentication
+- Hashed refresh tokens with rotation and revocation
+- bcrypt password hashing
+- Role-based authorization
+- CORS, security headers, rate limiting, and request logging
+- Health checks and global exception handling
+- Authentication and token-security test suite
+- GitHub Actions CI
+- Initial deployment and community documentation
+
+[Unreleased]: https://github.com/HoungDev/fastapi-production-api/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/HoungDev/fastapi-production-api/compare/v1.1.0...v1.2.0
+[1.1.0]: https://github.com/HoungDev/fastapi-production-api/compare/v1.0.1...v1.1.0
+[1.0.1]: https://github.com/HoungDev/fastapi-production-api/compare/v1.0.0...v1.0.1
+[1.0.0]: https://github.com/HoungDev/fastapi-production-api/releases/tag/v1.0.0
